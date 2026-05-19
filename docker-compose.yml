@@ -1,0 +1,20 @@
+
+services:
+  writer:
+    image: alpine
+    container_name: contenedor_escritor
+    volumes:
+      - mi_espacio_compartido:/app/logs
+    command: sh -c "while true; do date >> /app/logs/proceso.log; sleep 30; done"
+
+  reader:
+    image: alpine
+    container_name: contenedor_lector
+    volumes:
+      - mi_espacio_compartido:/app/logs:ro
+    command: tail -f /app/logs/proceso.log
+    depends_on:
+      - writer
+
+volumes:
+  mi_espacio_compartido:
